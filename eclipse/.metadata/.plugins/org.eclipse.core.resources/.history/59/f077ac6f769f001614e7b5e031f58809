@@ -1,0 +1,64 @@
+package com.chocolatemod.integration;
+
+import growthcraft.api.cellar.common.Residue;
+import growthcraft.api.core.definition.IMultiItemStacks;
+
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.chocolatemod.lib.Strings;
+
+import squeek.applecore.api.AppleCoreAPI;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+
+public class Growthcraft extends ModIntegrationBase
+{
+	public static final String MOD_ID = "Growthcraft";
+	private static boolean GrowthcraftLoaded;
+
+	public Growthcraft()
+	{
+		super(Strings.MODID, MOD_ID);
+	}
+
+	public void doInit()
+	{
+		GrowthcraftLoaded = Loader.isModLoaded(MOD_ID);
+	}
+
+	// abstract the AppleCoreAPI reference into an Optional.Method so that AppleCore is not a hard dependency
+	@Optional.Method(modid=MOD_ID)
+	private static Event.Result BrewingRecipe(@Nonnull FluidStack pInputFluid, @Nonnull IMultiItemStacks pInputItem, @Nonnull FluidStack pOutputFluid, int pTime, @Nullable Residue pResidue)
+	{
+		return 
+				AppleCoreAPI.dispatcher.validatePlantGrowth(block, world, x, y, z, random);
+	}
+
+	public static Event.Result validateGrowthTick(Block block, World world, int x, int y, int z, Random random)
+	{
+		if (GrowthcraftLoaded)
+			return validateGrowthTick_AC(block, world, x, y, z, random);
+
+		return Event.Result.DEFAULT;
+	}
+
+	// abstract the AppleCoreAPI reference into an Optional.Method so that AppleCore is not a hard dependency
+	@Optional.Method(modid=MOD_ID)
+	private static void announceGrowthTick_AC(Block block, World world, int x, int y, int z, int previousMetadata)
+	{
+		AppleCoreAPI.dispatcher.announcePlantGrowth(block, world, x, y, z, previousMetadata);
+	}
+
+	public static void announceGrowthTick(Block block, World world, int x, int y, int z, int previousMetadata)
+	{
+		if (GrowthcraftLoaded)
+			announceGrowthTick_AC(block, world, x, y, z, previousMetadata);
+	}
+}

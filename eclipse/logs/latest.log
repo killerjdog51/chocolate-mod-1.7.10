@@ -1,0 +1,29 @@
+[15:01:53] [main/INFO]: Setting user: Player706
+[15:01:55] [Client thread/INFO]: LWJGL Version: 2.9.1
+[15:02:07] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Chocolate Mod
+[15:02:08] [Sound Library Loader/INFO]: Sound engine started
+[15:02:15] [Client thread/INFO]: Created: 16x16 textures/blocks-atlas
+[15:02:15] [Client thread/INFO]: Created: 16x16 textures/items-atlas
+[15:02:15] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Chocolate Mod
+[15:02:16] [Client thread/INFO]: Created: 512x512 textures/blocks-atlas
+[15:02:16] [Client thread/INFO]: Created: 512x256 textures/items-atlas
+[15:02:17] [Sound Library Loader/INFO]: Sound engine started
+[15:03:01] [Server thread/INFO]: Starting integrated minecraft server version 1.7.10
+[15:03:01] [Server thread/INFO]: Generating keypair
+[15:03:01] [Server thread/INFO]: Preparing start region for level 0
+[15:03:02] [Server thread/INFO]: Changing view distance to 12, from 10
+[15:03:02] [Server thread/INFO]: Player706[local:E:c3c2f3d3] logged in with entity id 307 at (-1181.6466920688872, 9.0, -315.6250277357989)
+[15:03:02] [Server thread/INFO]: Player706 joined the game
+[15:03:06] [Server thread/INFO]: Saving and pausing game...
+[15:03:06] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[15:03:06] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[15:03:06] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[15:03:06] [Server thread/INFO]: Saving chunks for level 'New World'/Chocolate
+[15:03:07] [Server thread/INFO]: Stopping server
+[15:03:07] [Server thread/INFO]: Saving players
+[15:03:07] [Server thread/INFO]: Saving worlds
+[15:03:07] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[15:03:07] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[15:03:07] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[15:03:07] [Server thread/INFO]: Saving chunks for level 'New World'/Chocolate
+[15:03:10] [Client thread/INFO]: Stopping!

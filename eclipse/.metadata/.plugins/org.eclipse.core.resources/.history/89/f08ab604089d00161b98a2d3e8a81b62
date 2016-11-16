@@ -1,0 +1,221 @@
+package com.chocolatemod.main;
+
+import java.io.File;
+
+import com.chocolatemod.armor.ArmorRegistry;
+import com.chocolatemod.block.BlockRegistry;
+import com.chocolatemod.brewing.brewing;
+import com.chocolatemod.crops.crops;
+import com.chocolatemod.event.GenerateStrawberriesEvent;
+import com.chocolatemod.event.mobdrops;
+import com.chocolatemod.food.FoodRegistry;
+import com.chocolatemod.item.ItemRegistry;
+import com.chocolatemod.lib.Strings;
+import com.chocolatemod.liquids.LiquidRegistry;
+import com.chocolatemod.mobs.MobRegistry;
+import com.chocolatemod.plants.PlantRegistry;
+import com.chocolatemod.recipes.Recipes;
+import com.chocolatemod.tools.Tools;
+import com.chocolatemod.worldgen.WorldGenRegistry;
+import growthcraft.api.cellar.CellarRegistry;
+import growthcraft.api.cellar.brewing.BrewingRecipe;
+import growthcraft.api.cellar.brewing.IBrewingRegistry;
+import growthcraft.api.core.util.MultiStacksUtil;
+import growthcraft.milk.init.GrcMilkFluids;
+import growthcraft.api.cellar.common.Residue;
+import growthcraft.core.util.FluidFactory; */
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+
+@Mod(modid = Strings.MODID, name = Strings.name, version = Strings.VERSION)
+
+public class MainRegistry {
+
+	@SidedProxy(clientSide = "com.chocolatemod.main.ClientProxy", serverSide = "com.chocolatemod.main.CommonProxy")
+	public static CommonProxy proxy;
+
+	@Instance(Strings.MODID)
+	public static MainRegistry modInstance;
+
+	//CreativeTab
+
+	public static CreativeTabs tabChocolateFood = new CreativeTabs("tabChocolateFood") {
+		public ItemStack getIconItemStack() {
+			return new ItemStack(FoodRegistry.chocolatebar1, 1, 0);
+		}
+
+		@Override
+		public Item getTabIconItem() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+
+
+	public static CreativeTabs tabChocolateBlocks = new CreativeTabs("tabChocolateBlocks") {
+		public ItemStack getIconItemStack() {
+			return new ItemStack(BlockRegistry.chocolateblock, 1, 0);
+		}
+
+		@Override
+		public Item getTabIconItem() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+
+	public static CreativeTabs tabChocolateTools = new CreativeTabs("tabChocolateTools") {
+		public ItemStack getIconItemStack() {
+			return new ItemStack(Tools.ChocolatePickaxe, 1, 0);
+		}
+
+		@Override
+		public Item getTabIconItem() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+
+	public static CreativeTabs tabChocolateCombat = new CreativeTabs("tabChocolateCombat") {
+		public ItemStack getIconItemStack() {
+			return new ItemStack(Tools.ChocolateSword, 1, 0);
+		}
+
+		@Override
+		public Item getTabIconItem() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+
+	public static CreativeTabs tabChocolateMisc = new CreativeTabs("tabChocolateMisc") {
+		public ItemStack getIconItemStack() {
+			return new ItemStack(LiquidRegistry.chocolateMilkBucket, 1, 0);
+		}
+
+		@Override
+		public Item getTabIconItem() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+	
+	public static int DimID;
+	public static int ChocolatePlainsID;
+	public static int ChocolateForestID;
+	public static int ChocolateMountainsID;
+	public static int ChocolateMushroomsID;
+	public static int ChocolateSwampID;
+	public static int ChocolateJungleID;
+	public static int ChocolateDesertID;
+	public static int ChocolateRiverID;
+	public static int ChocolateOceanID;
+	
+	public static boolean EnablePaxels;
+	public static boolean EnableNonChocolateFood;
+	public static boolean EnableBrewing;
+	public static boolean EnableMolding;
+	public static boolean EnableBows;
+	public static boolean EnableMilkChocolate;
+	public static boolean EnableGrowthcraft;
+
+	@EventHandler
+	public static void PreLoad(FMLPreInitializationEvent PreEvent) {
+		
+		//====================
+		// CONFIGURATION
+		//====================
+		Configuration config = new Configuration(new File(PreEvent.getModConfigurationDirectory(), "chocolate_mod.conf"));
+		try
+		{
+			//config.addCustomCategoryComment("Biomes", "Biomes");
+			config.load();
+
+			DimID = config.get("Biomes", "Chocolate Dimension ID", 3, "This is the dimension ID for the chocolate dimension.").getInt();
+			ChocolatePlainsID = config.get("Biomes", "Chocolate Plains Biome ID", 150, "This is the biome ID for the Chocolate Plains Biome.").getInt();
+			ChocolateForestID = config.get("Biomes", "Chocolate Forest Biome ID", 151, "This is the biome ID for the Chocolate Forest Biome.").getInt();
+			ChocolateMountainsID = config.get("Biomes", "Chocolate Mountain Biome ID", 152, "This is the biome ID for the Chocolate Mountain Biome.").getInt();
+			ChocolateMushroomsID = config.get("Biomes", "Chocolate Mushroom Biome ID", 153, "This is the biome ID for the Chocolate Mushroom Biome.").getInt();
+			ChocolateSwampID = config.get("Biomes", "Chocolate Swamp Biome ID", 154, "This is the biome ID for the Chocolate Swamp Biome.").getInt();
+			ChocolateJungleID = config.get("Biomes", "Chocolate Jungle Biome ID", 155, "This is the biome ID for the Chocolate Jungle Biome.").getInt();
+			ChocolateDesertID = config.get("Biomes", "Chocolate Desert Biome ID", 156, "This is the biome ID for the Chocolate Desert Biome.").getInt();
+			ChocolateRiverID = config.get("Biomes", "Chocolate River Biome ID", 157, "This is the biome ID for the Chocolate River Biome.").getInt();
+			ChocolateOceanID = config.get("Biomes", "Chocolate Ocean Biome ID", 158, "This is the biome ID for the Chocolate Ocean Biome.").getInt();
+
+			
+			EnablePaxels = config.get("General", "Enable Paxels", true, "This enables you to craft paxels, a universal tool. If false disables the items and crafting recipe.  Default value = true").getBoolean(true);
+			EnableNonChocolateFood = config.get("General", "Enable NonChocolate Food", true, "this enables you to craft non-chocolate related food items, such as mint tea or caramel apples. If false disables the items and crafting recipes.  Default value = true").getBoolean(true);
+			EnableBrewing = config.get("General", "Enable Brewing", true, "This enables you to brew chocolate milk. If false allows crafting of chocolate milk.  Default value = true").getBoolean(true);
+			EnableMolding = config.get("General", "Enable Molding", true, "This enables Bar/Ball molds and allows you to mold chocolate bars/balls. If false allows crafting of bars/balls.  Default value = true").getBoolean(true);
+			EnableBows = config.get("General", "Enable Bows", true, "This enables you to craft bows. If false disables the weapon and crafting recipe. Default value = true").getBoolean(true);
+			EnableMilkChocolate = config.get("General", "Enable Milk Chocolate", false, "This changes the names of 'Light Chocolate' to 'Milk Chocolate'. Default value = false").getBoolean(false);
+			EnableGrowthcraft = config.get("General", "Growthcraft Integration", false, "If you have Growthcraft installed you can enable this to integrate their Kettle for brewing. Defalt value = false").getBoolean(false);
+		}
+		finally
+		{
+			if (config.hasChanged()) { config.save(); }
+		}
+		ItemRegistry.mainRegistry();
+		BlockRegistry.mainRegistry();
+		WorldGenRegistry.init();
+		WorldGenRegistry.initialise();
+		FoodRegistry.mainRegistry();
+		Tools.mainRegistry();
+		brewing.mainRegistry();
+		crops.mainRegistry();
+		PlantRegistry.mainRegistry();
+		MobRegistry.mainRegistry();
+		ArmorRegistry.mainRegistry();
+		LiquidRegistry.MainRegistry();
+		Recipes.mainRegistry();
+		proxy.registerRenderers();
+
+		MinecraftForge.EVENT_BUS.register(new mobdrops());
+		//MinecraftForge.TERRAIN_GEN_BUS.register(new GenerateStrawberriesEvent());
+
+		if(EnableGrowthcraft){
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(FluidRegistry.getFluidStack("grc.milk", 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.CocoaPowder)),new FluidStack(LiquidRegistry.whiteChocolateMilkFluid, 40), 1200, null));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.whiteChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.CocoaPowder)),new FluidStack(LiquidRegistry.lightChocolateMilkFluid, 40), 1200, null));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.lightChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.CocoaPowder)),new FluidStack(LiquidRegistry.chocolateMilkFluid, 40), 1200, null));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.chocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.CocoaPowder)),new FluidStack(LiquidRegistry.darkChocolateMilkFluid, 40), 1200, null));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.darkChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.bowlmilk)),new FluidStack(LiquidRegistry.chocolateMilkFluid, 40), 1200, new Residue(new ItemStack(Items.bowl), 1.0F)));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.darkChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(Items.milk_bucket)),new FluidStack(LiquidRegistry.chocolateMilkFluid, 40), 1200, new Residue(new ItemStack(Items.bucket), 1.0F)));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.chocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.bowlmilk)),new FluidStack(LiquidRegistry.lightChocolateMilkFluid, 40), 1200, new Residue(new ItemStack(Items.bowl), 1.0F)));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.chocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(Items.milk_bucket)),new FluidStack(LiquidRegistry.lightChocolateMilkFluid, 40), 1200, new Residue(new ItemStack(Items.bucket), 1.0F)));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.lightChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.bowlmilk)),new FluidStack(LiquidRegistry.whiteChocolateMilkFluid, 40), 1200, new Residue(new ItemStack(Items.bowl), 1.0F)));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.lightChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(Items.milk_bucket)),new FluidStack(LiquidRegistry.whiteChocolateMilkFluid, 40), 1200, new Residue(new ItemStack(Items.bucket), 1.0F)));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.whiteChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(ItemRegistry.bowlmilk)),FluidRegistry.getFluidStack("grc.milk", 40), 1200, new Residue(new ItemStack(Items.bowl), 1.0F)));
+		CellarRegistry.instance().brewing().addRecipe(new BrewingRecipe(new FluidStack(LiquidRegistry.whiteChocolateMilkFluid, 40), MultiStacksUtil.toMultiItemStacks(new ItemStack(Items.milk_bucket)),FluidRegistry.getFluidStack("grc.milk", 40), 1200, new Residue(new ItemStack(Items.bucket), 1.0F)));
+		} 
+	}
+
+
+	@EventHandler
+	public static void load(FMLInitializationEvent event) {
+
+	}
+
+	@EventHandler
+	public static void PostLoad(FMLPostInitializationEvent PostEvent) {
+
+	}
+	
+}

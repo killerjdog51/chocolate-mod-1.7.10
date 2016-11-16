@@ -1,0 +1,14 @@
+[
+{
+  "modid": "killerjdog51",
+  "name": "Chocolate Mod",
+  "description": "Adds various chocolate related items and blocks into Minecraft. As well as an entire chocolate dimension to explore.     I would also like to give credit to TheLordofNyrin, for creating textures and providing ideas. Gwafu, for helping implement the brewing feature. JayZX535 and coolAlias, for helping with generating structures. Jimmy04Creeper, for helping create the custom dimension.     And you, I would like to give you credit for downloading and supporting this mod. Thank you very much.",
+  "version": "3.0.2",
+  "mcversion": "1.7.10",
+  "authorList": ["killerjdog51"],
+  "credits": "X8XscoutX8X, for letting me use his source code and textures.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
